@@ -1,0 +1,134 @@
+import "typedefine.proto";
+
+message STKeyValue
+{
+    optional uint32 uiKey     = 1;             //键
+    optional uint32 uiVal     = 2;             //值
+};
+
+message STAdPoints
+{
+    repeated uint32 uiADPoints     = 1;   //AD值
+};
+
+message STCupPos   //杯子信息
+{
+    optional uint32 uiDskId     = 1;              //盘号
+    optional uint32 uiCupId     = 2;              //杯号
+};
+message STMarginScan
+{
+    optional STCupPos stCupPos     = 1;           //试剂位置
+    optional uint32 uiMarginDepth  = 2;           //余量高度
+};
+message STLiquidInfo
+{
+    optional STCupPos stCupPos  = 1;              //液体位置
+    optional uint32 uiAddVol    = 2;              //加液量
+};
+
+message STRctCupStatus
+{
+    optional uint32 uiRctCupPos               = 1; //反应杯位置
+    optional CupState enCupState              = 2[default = CUP_STATE_FREE]; //反应杯状态
+    optional uint32 uiRctTimes                = 3; //反应时间
+    optional uint32 uiTaskId                  = 4; //任务ID
+    optional STCupPos stSmpPos                = 5; //样本位置
+    optional uint32 uiDilutType		      = 6; //稀释类型
+};
+
+message STBarcodeScan
+{
+    optional STCupPos stCupPos  = 1;           //条码位置
+    optional string strBarcode  = 2;              //条码
+};
+
+//试剂信息
+message STReagInfo
+{
+    optional STCupPos stCupPos       = 1;             //试剂位置
+    optional bytes strReagName       = 2;             //试剂名称
+    optional BottleType enBType      = 3;             //试剂瓶类型
+    optional uint32 uiMarginDepth    = 4;             //余量高度
+    optional uint32 uiReType   	     = 5;
+};
+
+//试剂瓶门限值
+message STThreshold
+{
+    optional BottleType enBType      = 1;             //试剂瓶类型
+    optional uint32 uiThreshold      = 2;             //门限值
+};
+
+//通知杯子AD值
+message STCupADValue
+{
+    optional uint32 uiCupId         = 1;   //杯号
+    repeated uint32 uiADPoints      = 2;   //AD值
+};
+
+//补偿参数
+message STOffsetPara
+{
+    optional uint32 uiType           = 1; //补偿类型
+    optional uint32 uiPos            = 2; //补偿位置
+    optional uint32 uiDir            = 3; //补偿方向
+    optional uint32 uiStep           = 4; //补偿步数
+};
+
+//暗电流测试AD信息
+message STDarkCurrentAD
+{
+    repeated STKeyValue stAdInfo = 1;//14路AD信息
+};
+
+//下位机版本号返回
+message STSubVers
+{
+    optional uint32 ulSubsysId                  = 1; //系统ID名称
+    optional string strTime                     = 2; //编译时间
+    optional string strVersions                 = 3; //版本号
+    optional uint32 fpgaVer                     = 4; //FPGA版本号（用16进制显示）
+};
+
+//告警信息
+message STAlarmInfo
+{
+    optional uint32 ulAlarmId        = 1;  //报警ID
+    repeated uint32 ulParas          = 2;  //参数
+    optional string strTime          = 3;  //产生时间
+};
+
+message STTestVal
+{
+    optional uint32 uiCup                   = 1;//杯位
+    repeated uint32 uiVal                   = 2;//AD值
+}
+
+//吸光度平滑
+message SmosData
+{
+	optional string prj			=1;	//项目名称
+	optional uint32 startP		=2;	//开始点
+	optional uint32 endP		=3;	//结束点
+	optional uint32 order		=4;	//介数
+	optional uint32 startBadP	=5;	//起始坏点
+	optional uint32 endBadP		=6;	//结束坏点
+}
+
+message STAbSorbSmos
+{
+	repeated SmosData data		=1;	//平滑数据
+}
+
+message STCupID
+{
+	repeated uint32 id			=1; //ID号
+}
+
+//样本架条码
+message STSmpBacode
+{
+	optional uint32 cupno		=1; //位置号
+	optional string barcode		=2; //条码
+}

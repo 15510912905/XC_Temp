@@ -1,0 +1,14 @@
+message STRAct	
+{	
+	optional uint32 uiSubSys		=1;			//子系统
+	optional uint32 uiActType 		=2;			//动作类型
+	optional uint32 uiActIndex		=3;			//动作序号
+};
+
+message STSubActInfo
+{
+	optional bool bDone			=1[default = true];		//是否有效
+	optional uint32 uiActType 		=2;			//动作类型
+	repeated STRAct stRelyAct		=3;		//依赖动作
+};
+

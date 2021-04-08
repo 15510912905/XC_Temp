@@ -1,0 +1,529 @@
+//消息类型
+enum MsgType
+{
+    MSG_ReqReset            	= 2001; //请求整机复位
+    MSG_ResReset            	= 2002; //整机复位响应
+    MSG_ReqAddTask          	= 2003; //请求添加任务
+    MSG_ResAddTask          	= 2004; //添加任务响应
+    MSG_NotifyMachineStatus 	= 2005; //通知中位机状态
+    MSG_NotifyRctCupStatus  	= 2006; //通知反应杯状态
+    MSG_ReqMarginScan       	= 2007; //请求余量扫描
+    MSG_ResMarginScan       	= 2008; //余量扫描响应
+    MSG_ReqBarcodeScan      	= 2009; //条码扫描请求
+    MSG_ResBarcodeScan      	= 2010; //条码扫描响应
+    MSG_ReqAirOut           	= 2011; //请求排空气 
+    MSG_NotifyTimer         	= 2012; //通知定时器到
+    MSG_ReqReagentSuspend   	= 2013; //请求试剂暂停
+    MSG_AckTaskResult       	= 2014; //任务结果确认消息
+    MSG_ReqIntensifyWash    	= 2015; //请求强化清洗
+    MSG_NotifyReportResult  	= 2016; //通知上报任务结果
+    MSG_NotifyReagInfo      	= 2017; //上位机通知试剂信息
+    MSG_WriteLog            	= 2018; //通知日志打印
+    MSG_NotifyADValue       	= 2019; //通知光量检测，杯空白AD值
+    MSG_NotifyConnect       	= 2020; //中位机连接成功
+    MSG_ReqHello            	= 2021; //心跳检查请求
+    MSG_ResHello            	= 2022; //心跳检查响应
+    MSG_ReqActCmd           	= 2023; //请求请求动作命令
+    MSG_NotifyOffset        	= 2024; //通知补偿参数
+    MSG_ReqStopMach         	= 2025; //请求停止仪器
+    MSG_ReqPreciseAdd       	= 2026; //请求精确加量
+    MSG_ReqLightCheck       	= 2027; //请求光量检查
+    MSG_ReqCupBlank         	= 2028; //请求杯空白测试
+    MSG_ReqWashReactCup     	= 2029; //清洗反应杯
+    MSG_ReqSetTime          	= 2030; //设置中位机时间
+    MSG_ReqDarkCurrent      	= 2032; //暗电流测试请求
+    MSG_ResDarkCurrent      	= 2033; //暗电流测试响应
+    MSG_NotifyTemp          	= 2035; //通知反应盘或试剂盘温度      
+    MSG_GetMidLog           	= 2036; //获取中位机日志
+    MSG_CollideNdlConfig    	= 2037; //撞针处理配置
+    MSG_GetVres             	= 2038; //查询版本
+    MSG_ResVres             	= 2039; //返回版本
+    MSG_NotifyFailedSmpTask 	= 2040; //在机器故障时通知失败的样本任务
+    MSG_ReqCompBack         	= 2041; //补偿备份
+    MSG_ResCompBack         	= 2042; //补偿备份
+    MSG_ReqCompRecover      	= 2043; //补偿恢复
+    MSG_ResCompRecover      	= 2044; //补偿恢复
+    MSG_NotifyAlarm         	= 2045; //通知报警信息
+    MSG_NotifySynAlarm      	= 2046; //通知报警同步
+    MSG_ReqDeleteAlarm      	= 2047; //请求删除报警
+    MSG_NotifySendTask      	= 2049; //通知下发任务
+    MSG_TempeQuery          	= 2050; //温度查询
+    MSG_UpdateDwn           	= 2051; //下位机升级
+    MSG_ReqSmoothAreaTest   	= 2052; //平坦区测试请求
+    MSG_ResSmoothAreaTest   	= 2053; //平坦区测试响应
+    MSG_ReqShowWave         	= 2054; //虚拟示波器请求
+    MSG_ResShowWave         	= 2055; //虚拟示波器响应
+    MSG_ReqConnectPort      	= 2056; //端口切换
+    MSG_ADtest              	= 2057; //光源灯AD测试
+    MSG_NotifyMotor         	= 2058; //通知电机参数
+    MSG_ReqBackupMotor      	= 2059; //请求备份电机参数
+    MSG_ResBackupMotor      	= 2060; //电机备份响应
+    MSG_ReqRecoverMotor     	= 2061; //恢复电机参数
+    MSG_ReqRegPollution     	= 2062; //下发试剂污染数据
+    MSG_ReqSmpPollution     	= 2063; //下发样本污染数据
+    MSG_ReqBeepAlarm	    	= 2064;	//下发蜂鸣器配置
+	MSG_ReqRctPollution     	= 2065; //反应杯交叉污染信息
+    MSG_Consume        			= 2066;	//耗材信息
+	MSG_CPUID					= 2067;	//仪器ID查询
+	MSG_ReqShelf 				= 2068;	//申请样本架任务
+	MSG_ResShelf				= 2069; //响应样本架扫描
+	MSG_SetShelf				= 2070;	//设置样本架信息
+	MSG_NotifyState				= 2071; //通知状态
+	MSG_FreeShelf				= 2072; //释放样本架
+	MSG_NotifySmpFrameStatus	= 2073; //通知样本架状态
+	MSG_NotifyReagChange		= 2074; //通知试剂改变信息
+    MSG_ReqShowAD           	= 3010; //AD值监控  从3000开始为调试软件专用
+    MSG_ResShowAD           	= 3011;
+    MSG_FLXQuery            	= 3012;
+    MSG_ReqReadDarkCurrent  	= 3013; //读取暗电流
+    MSG_ResReadDarkCurrent  	= 3014; //读取暗电流	
+    MSG_NotifyTestingADValue	= 3015; //通知测试中的杯空白值
+    MSG_ReqSkipCup          	= 3016; //通知跳过杯子
+    MSG_SetSleep	      		= 3017; //液路睡眠
+    MSG_NotifySound	        	= 3018;	//声音模块消息
+    MSG_CfgAlarmSound	    	= 3019;	//报警声音配置消息
+    MSG_ReqBeepPlay	        	= 3020;	//请求蜂鸣器报警
+    MSG_TestOver            	= 3021;	//测试完成
+	MSG_BloodAbsorb         	= 3022;	//全血吸样模式
+	MSG_TempPara				= 3023;	//温度参数
+	MSG_AutoloadDebug           = 3024; //自动装载调试命令
+	MSG_AutoLoadStatus          = 3025; //自动装载状态
+	MSG_ReqAutoPowerOn			= 3036; //设置（或取消）自动开机
+	MSG_ReqAutoPowerOnInfo		= 3037; //获取设备自动开机信息
+	MSG_ResAutoPowerOnInfo		= 3038; //返回设备自动开机信息
+};
+
+//设备类型
+enum ActType 
+{
+    Act_Reset               = 0;  //复位
+    Act_Move                = 1;  //转动
+    Act_Absorb              = 2;  //吸液
+    Act_Discharge           = 3;  //排液
+    Act_Wash                = 4;  //清洗        
+    Act_AirOut              = 5;  //排空气
+    Act_Mix                 = 6;  //搅拌
+    Act_IntensifyWash       = 7; //强化清洗
+    Act_BcScan              = 8; //条码扫描
+    Act_DwnQuery            = 9; //下位机查询
+    Act_TrimOffset          = 10; //微调补偿参数
+    Act_SaveOffset          = 11; //保存补偿参数
+    Act_NdlVrt              = 12; //针垂直运动
+    Act_Light               = 13; //光源灯控制
+    Act_Ad                  = 14; //配置AD采集
+    Act_DskHrotate          = 15; //盘正/逆时针转动
+    Act_MarginScan          = 16; //余量扫描  
+    Act_TempSwitch          = 17; //温控开关
+    Act_Fault               = 18; //故障恢复
+    Act_Debug               = 19; //下位机调试
+    Act_TempQuery           = 20; //温度查询
+    Act_CtrlP04             = 21; //齿轮增压泵控制
+    Act_MidState            = 22; //中位机状态下发到下位机
+    Act_PVCtrl              = 23; //泵阀控制
+    Act_PumpCtrl            = 24; //注射泵控制
+    Act_LiquidsCheck        = 25; //液路传感器使能控制
+    Act_CoolingCtrl         = 26; //制冷开关控制
+    Act_BBClear             = 27; //清除下位机日志
+    Act_SmpLightCtrl        = 28; //样本指示灯控制
+    Act_UpdateDwn           = 29; //升级下位机
+    Act_OlnyMix             = 30; //只搅拌
+    Act_Showave             = 31; //虚拟示波器控制
+    Act_LiquidDBG           = 32; //液路调试
+    Act_SetFlState          = 33; //设置浮子状态
+    Act_WriteMotor          = 34; //写电机参数
+    Act_MoveDilu            = 35;  //稀释位样本针旋转
+    Act_AbsorbDilu          = 36;  //稀释位样本针吸样
+    Act_DischargeDilu       = 37;  //稀释位样本针排样
+    Act_UpdateFpga          = 38; //升级逻辑
+    Act_sleepCtl            = 39; //液路睡眠
+    Act_washLong            = 40; //长清洗
+    Act_washShort           = 41; //短清洗
+	Act_SetWTemp			= 42;
+	Act_SetRTemp			= 43;
+	Act_Timer				= 44;
+	Act_MoveAbs				= 45;
+	Act_MoveW				= 46;
+	Act_MoveInner			= 47;
+	Act_MoveOuter			= 48;	
+	Act_OneAD				= 49;
+	Act_SetGain				= 50;
+	Act_GetShelf			= 51;
+	Act_FreeShelf			= 52;
+	Act_MoveDisg			= 53;
+	Act_GetIn				= 54;
+	Act_FreeShelfIn			= 55;
+	Act_StateSwitch         = 56; //状态切换
+	Act_TempControl         = 57; //温控开关，清洗水温控
+	
+	Act_GwPushIn			= 100;		
+	Act_GwShelfScan			= 101;
+	Act_GwScheduGet         = 104;
+	Act_GwScheduPut         = 105;
+	Act_GwTransNorm         = 106;
+	Act_GwTransEmer         = 107;
+	Act_GwFreeGet           = 108;
+	Act_GwFreePop           = 109;
+
+	Act_GwRecycle           = 111;
+    Act_GwFreeRecy          = 112;
+	Act_GwPushOut           = 113;
+	Act_GwChangNorm         = 114;
+	Act_GwChangEmer         = 115;
+	Act_GwChangRecy         = 116;
+	
+	Act_TPMoveL             =120;
+	Act_TPMoveF             =121;
+	Act_TPMoveR             =122;
+	Act_VGMoveL             =123;
+	Act_VGMoveF             =124;
+	Act_VGMoveR             =125;
+};                              
+
+
+//服务器Pid
+enum ServerPid
+{    
+    SPid_SocketMonitor	= 401;              //心跳模块
+						
+    SPid_Oammng       	= 509;              //中位机Oam模块
+    SPid_BcScan       	= 510;              //条码扫描模块
+    SPid_Maintain     	= 520;              //服务器维护模块
+    SPid_CheckLightCup	= 530;              //光亮检查和杯空白模块
+    SPid_DarkCurrent  	= 540;              //暗电流测试模块
+    SPid_Alarm        	= 550;              //中位机告警模块
+    Spid_UpdateDwn    	= 560;              //升级下位机
+    SPid_Showave      	= 570;              //虚拟示波器
+    SPid_Smooth       	= 580;              //平坦区测试
+    SPid_ShowAD       	= 590;              //AD值采集
+    SPid_Task         	= 701;              //服务器任务模块
+    SPid_MarginScan   	= 703;              //余量扫描模块
+    SPid_AirOut       	= 704;              //排空气模块
+    SPid_IntensifyWash	= 705;              //三针强化清洗
+    SPid_Reset        	= 706;              //整机复位模块
+    SPid_DwnCmd       	= 707;              //补偿模块
+    SPid_PreciseAdd   	= 708;              //精准加样模块
+    SPid_TmpSwitch    	= 709;              //开关温控模块
+						
+						
+
+    SPid_SmpNdl       	= 901;              //样本针-外
+	SPid_SmpNdlb        = 902; 				//样本针-内
+	SPid_ReactDsk       = 903;              //反应盘
+	SPid_AutoWash     	= 904;              //自动清洗
+	SPid_SMix     		= 905;              //样本搅拌
+	SPid_R2Mix      	= 906;              //试剂搅拌
+	SPid_R1           	= 907;              //R1-外
+    SPid_R1Dsk        	= 908;              //R1盘
+    SPid_R1b			= 909;				//R1-内
+    SPid_R2           	= 910;              //R2-外
+    SPid_R2Dsk	      	= 911;              //R2盘
+	SPid_R2b            = 912;				//R2-内
+	SPid_RTmpCtrl      	= 913;              //反应盘温度控制
+    SPid_WTmpCtrl     	= 914;              //清洗水温度控制	
+    SPid_CoolReag     	= 915;              //试剂制冷
+	SPid_ADOuter        = 916;				// AD单元外圈
+	SPid_ADInner        = 917;				// AD单元内圈
+    SPid_SmpDsk       	= 919;              //样本盘常规
+    SPid_SmpEmer       	= 920;              //样本盘急诊
+	SPid_Press      	= 921;              //增压泵单元
+	SPid_TmpCtrl      	= 922;              //温度控制
+	
+	SPid_AutoPowerOn	= 925;				//自动开机模块													 
+	SPid_Light          = 926;              //光源灯模块
+	SPid_31             = 931;
+	SPid_32             = 932;
+	SPid_33             = 933;
+	SPid_34             = 934;
+	SPid_35             = 935;
+	SPid_36             = 936;
+	SPid_37             = 937;
+	SPid_38             = 938;
+	SPid_39             = 939;
+	SPid_40				= 940;
+
+	SPid_AutoLoad       = 950;          //自动装载
+	SPid_Transport      = 951;          //转运模块
+	SPid_VerticalGripper = 952;         //垂直抓手模块
+	SPid_L1             = 953;          //L1盘
+	SPid_L2             = 954;          //L2盘
+	
+    SPid_TaskResult    = 1001;             //任务结果处理模块
+};
+
+//客户端Pid
+enum CilentPid
+{
+    CPid_SocketMonitor    = 402;          //心跳模块
+	GPid_GwayMonitor	  = 403;
+    CPid_Reagent          = 504;          //试剂模块
+    CPid_ReactDiskMonitor = 508;          //反应盘监控模块
+    CPid_Maintain         = 510;          //维护模块 
+    CPid_Alarm            = 513;          //告警模块
+    CPid_Sound		  	  = 514;	  	  //声音模块
+    CPid_OffSet           = 520;          //补偿模块
+	CPid_Consum			  = 530;      	  //耗材管理模块
+	CPid_Relation		  = 540;		  //分析部、轨道交互
+    CPid_SmpTask          = 901;          //样本模块
+    CPid_Calibrate        = 903;          //校准模块
+    CPid_SendTask         = 1001;         //任务下发模块
+	
+};
+//反应杯状态
+enum CupState
+{
+    CUP_STATE_FREE     = 0;     //空闲 
+    CUP_STATE_WASH     = 1;     //清洗
+    CUP_STATE_R1       = 2;     //加R1    
+    CUP_STATE_SAMPLE   = 3;     //加样
+    CUP_STATE_R2       = 4;     //加R2
+    CUP_STATE_R3       = 5;     //加R2
+    CUP_STATE_R4       = 6;     //加R2
+    CUP_STATE_REACTION = 7;     //反应中
+    CUP_STATE_DIRTY    = 8;     //脏杯
+    CUP_STATE_BUTT     = 9;     //异常
+};
+
+//设备类型
+enum DevType 
+{
+    SampleNdl  = 0;  //样本针
+    R1Ndl      = 1;  //R1针
+    R2Ndl      = 2;  //R2针
+};
+
+//试剂瓶类型
+enum BottleType
+{
+    BT_standard = 2;   //标准瓶
+    BT_micro    = 1;   //微量瓶
+	BT_middle   = 3;   //中型瓶
+};
+
+//试剂盘类型
+enum ReagDiskType
+{
+	ReagDisk_Default 	= 1; //试剂盘
+	ReagDisk_AutoLoad 	= 2; //自动装载试剂盘
+};
+
+//样本针位置
+enum SmpDskPos {
+    
+    SmpPosAbsrb1 = 0;
+    SmpPosAbsrb2 = 1;
+    SmpPosAbsrb3 = 2;
+    SmpPosAbsrb4 = 3;
+    SmpPosAbsrb5 = 4;
+    SmpPosWash = 5;//清洗位
+    SmpPosRailAbsrb = 6;//吸样位
+    SmpPosDilute = 7;//稀释位
+    SmpPosDischNml = 8;//
+    SmpPosDischISE = 9;
+};
+
+//试剂针位置
+enum RegDskPos {
+    RegPossWash      = 0;//清洗位
+    RegPossAbsrb     = 1;  //吸试剂位置
+    RegPossDischarg  = 2;  //排试剂位置
+};
+
+//搅拌杆位置
+enum MixNdlDskPos {
+    MixPossWash   = 0;   //清洗位
+    MixPoss33     = 1;   //33号搅拌位
+    MixPoss38     = 2;   //38号搅拌位
+    MixPoss67     = 3;   //67号搅拌位
+};
+
+//任务执行结果
+enum TaskResult
+{
+    TR_Success     = 0;         //任务执行成功
+    TR_SysFault    = 1;         //系统故障
+    TR_ReagErr     = 2;         //下发试剂位错误
+    TR_GetADErr    = 3;         //AD值采集失败
+    TR_AddR1Err    = 4;         //加R1失败
+    TR_AddR2Err    = 5;         //加R2失败
+    TR_AddR3Err	   = 6;		//加R3失败
+    TR_AddR4Err	   = 7;         //加R4失败
+    TR_AddSmpErr   = 8;         //加样失败
+    TR_UserCancel  = 9;         //用户取消
+    TR_NetErr      = 10;         //网络故障
+    TR_DilOver     = 11;        //用于稀释的杯子结束
+    TR_Skip        = 12;        //用于异常跳过(中位机自动重新分配测试，如赃杯)
+};
+
+//撞针杯底处理
+enum CollideNdl
+{
+    collide_stop    = 1;        //停止
+    collide_cancel  = 2;        //不停止-取消当前任务
+    collide_null    = 3;        //不做处理、只显示提示
+};
+
+//升级返回
+enum UpdateResult
+{
+    UR_success  = 0;            //成功
+    UR_failed   = 1;            //失败
+    UR_ing      = 2;            //升级中
+    UR_stop     = 3;            //中断
+};
+
+//液路调试命令类型
+enum LiquidDBG_Type
+{
+    app_deion_pipe_flood_req 	=1;   //去离子水管路灌注开始请求
+    app_smp_pipe_flood_req		=2;   //样本管路灌注开始请求
+    app_r1_pipe_flood_req		=3;   //r1管路灌注开始请求
+    app_r2_pipe_flood_req		=4;   //r2管路灌注开始请求
+    app_complete_drain_req		=5;   //整机排空请求
+    app_add_smponly_req			=6;   //吸样测试
+    app_add_r1only_req			=7;   //吸试剂1测试
+    app_add_r2only_req			=8;   //吸试剂2测试
+    app_drain_smponly_req		=9;   //排样测试
+    app_drain_r1only_req		=10;  //排试剂1测试
+    app_drain_r2only_req		=11;  //排试剂2测试
+    app_drain_add_smp_req		=12;  //吸排样测试
+    app_drain_add_r1_req		=13;  //吸排试剂1测试
+    app_drain_add_r2_req		=14;  //吸排试剂2测试
+
+    app_auto_wash_test_2_req	=15;  //外壁清洗
+    app_auto_wash_test_3_req	=16;  //搅拌杆清洗
+    app_auto_wash_test_4_req	=17;  //内壁清洗
+    app_auto_wash_test_6_req	=18;  //液路灌注(调试)        
+    app_auto_wash_test_71_req	=19;  //时序测试   首先，打开P03、P06、P07、P08。     
+    app_auto_wash_test_72_req	=20;  //时序测试   然后，在4.5s小时序内，按照小时序中液路泵阀的控制状态，实现时序内液路元件的开闭。
+	
+    app_auto_wash_close_allPV_req =21; //关所有泵阀
+	
+    washDBG_WR                  =22; //清洗剂清洗调试命令
+    washDBG_WW                  =23; //清洗水清洗调试命令
+    washDBG_OMVA                =24; //开主真空排液调试命令
+    washDBG_CMVA                =25; //关主真空排液调试命令
+	
+	app_accuracyAddS			=26;//模拟加样
+	app_accuracyAddR1			=27;//模拟加R1
+	app_accuracyAddR2			=28;//模拟加R2
+	app_accuracyRMix			=29;//模拟试剂搅拌
+	app_accuracySMix			=30;//模拟样本搅拌
+	app_smpb_pipe_flood_req 	= 31;//样本针S2管路灌注
+	app_r1b_pipe_flood_req 		= 32;//r12管路灌注
+	app_r2b_pipe_flood_req 		= 33;//r22管路灌注
+	app_drain_add_req           = 34;//吸排测试
+	app_add_req					= 35;//吸测试
+	app_drain_req				= 36;//排测试
+	app_accuracyAdd             = 37;//模拟加													
+};
+
+enum FLx_enum
+{
+    FL01_low    = 0;
+    FL01_high   = 1;
+    FL05_low    = 2;
+	FL05_high   = 3;
+    FL06_low    = 4;
+    FL06_high   = 5;
+    FL10        = 6;
+    FL11        = 7;
+    FL12        = 8;
+    FL13        = 9;
+	FL14        =10;
+	FLise       =11;
+	FLiseB      =12;
+}			 
+enum FLx_state
+{
+	FLX_ON		= 0;
+	FLX_OFF		= 1;
+	FLx_idll	= 0xff;
+};
+
+enum EN_DilutTaskType
+{
+	EN_DilutNorm = 0;    //正常任务
+	EN_DilutType = 1;	 //用于稀释
+	EN_ReactionType = 2; //用于反应
+};
+
+//耗材类型
+enum ConsumType
+{
+	Csum_Wash =998;
+	Csum_Ligth =999;
+};
+
+//反应盘圈号
+enum ReactCircle
+{
+	Circle_All = 0;
+	Circle_Outer = 1;
+	Circle_Inner = 2;
+};
+
+//样本架请求
+enum ShelfCtrlType
+{
+	Shelf_Req = 1;	//样本架请求
+	Shelf_Res = 2;	//样本架响应(下发)
+	Shelf_Free = 3;	//样本架释放
+};
+
+//仪器单元
+enum MachUnit
+{
+	Unit_Gway= 0;	//管理单元
+	Unit_A1 = 1;	//分析部1
+	Unit_A2 = 2;	//分析部2
+	Unit_A3 = 3;	//分析部3
+	Unit_A4 = 4;	//分析部4
+	Unit_UI = 5;	//UI上位机
+};
+
+//样本针位置
+enum SmpNdlPos 
+{
+    SNdlPosDilute  = 0; //水平稀释位置
+    SNdlPosDischarg = 1; //水平排样位置
+    SNdlPosReset = 2;
+    SNdlPosW1 = 3;//清洗剂位
+    SNdlPosW2 = 4;
+    SNdlPosW3 = 5;	
+    SNdlPosEmer = 6;//吸样位
+    SNdlPosNorm = 7;//稀释位	
+};
+
+enum R1DskPos {
+  R1DskPosouter1 = 1;
+  R1DskPosouter2 = 7;
+  R1DskPosInner1 = 10;
+  R1DskPosInner2 = 4;
+};
+
+enum R2DskPos {
+  R2DskPosouter1 = 1;
+  R2DskPosouter2 = 9;
+  R2DskPosInner1 = 12;
+  R2DskPosInner2 = 4;
+};
+
+//试剂针位置
+enum ReagNdlPos 
+{
+    RNdlPosDischarg = 1; //水平排样位置
+    RNdlPosReset = 2;
+    RNdlPosW1 = 3;//清洗剂位
+    RNdlPosW2 = 4;
+    RNdlPosW3 = 5;
+    RNdlPosAbsorb1 = 6;//吸样位1
+    RNdlPosAbsorb2 = 7;//吸样位1
+}
+
+//三针强化清洗类型
+enum IntensifyWashType
+{
+	IntensifyWashAcid = 1; //酸洗
+	IntensifyWashAlkali = 2; //碱洗
+	IntensifyWashAcidAlkali = 3; //酸碱洗
+};

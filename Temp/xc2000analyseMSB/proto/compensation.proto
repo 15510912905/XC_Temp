@@ -1,0 +1,48 @@
+//日志备份配置
+message CBackLog
+{
+    optional uint32 uiLogBackTime    = 1; //日志备份时间
+};
+
+message CServerPort
+{
+	optional uint32 uiport           = 1; //服务器端口号
+};
+
+
+//告警配置信息
+message CAlarmInfo
+{
+    optional uint32 ulAlarmId        = 1;  //报警ID
+    optional uint32 ulAlarmLevel     = 2;  //报警级别
+    optional bool   bBootFilter      = 3;  //启动时过滤 
+    optional uint32 ulAfterTreatWay  = 4;  //后处理方式
+};
+
+//告警列表
+message CAlarmList
+{
+    repeated CAlarmInfo data         = 1;
+};
+
+//补偿数据结构体
+message CCompInfo
+{
+	optional uint32 location  = 1; //补偿位置
+	optional uint32 dir		  = 2; //补偿方向 1: 顺时针 2:逆时针
+	optional uint32 step      = 3; //补偿步数 
+};
+
+//每个单片机补偿数据
+message CMcu
+{
+	optional uint32 subsysid         = 1; //子系统号
+	optional uint32 comptype         = 2; //补偿类型
+    repeated CCompInfo comps         = 3; //补偿数据
+};
+
+//补偿备份数据
+message CMcuList
+{
+    repeated CMcu data               = 1;
+};

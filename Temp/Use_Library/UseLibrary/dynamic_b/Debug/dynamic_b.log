@@ -1,0 +1,3 @@
+﻿  dynamic_b.cpp
+D:\1azrrecourse\C_prj\Library_A\Library_learn\Dynamic_a\dynamic_a.h(62,6): warning C4091: '__declspec(dllimport)': ignored on left of 'DLL_TEST::MathA' when no variable is declared
+  dynamic_b.vcxproj -> D:\1azrrecourse\C_prj\Use_Library\UseLibrary\Debug\dynamic_b.exe

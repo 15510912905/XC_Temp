@@ -1,0 +1,4 @@
+LIBRARY Dynamic_a
+
+EXPORTS
+PrintHello

@@ -1,0 +1,25 @@
+import "typedefine.proto";
+
+//通用功能消息类型
+enum ComMsgType
+{
+	MSG_ReqShowSmooth  = 4001;	//请求测试平坦区
+	MSG_ResShowSmooth  = 4002;	//平坦区返回
+}
+
+message STReqShowSmooth
+{
+	optional uint32 count = 1;	//采集个数
+}
+
+message adOP
+{
+	optional uint32 op	= 1;		//光耦信号
+	optional uint32 ad	= 2;		//AD值
+}
+
+message STResShowSmooth
+{
+	optional ReactCircle cirle 	= 1; 	//1-外圈，2-内圈
+	repeated adOP value 	= 2;	//数据 
+}

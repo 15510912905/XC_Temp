@@ -1,0 +1,486 @@
+import "upmsgstruct.proto";
+import "typedefine.proto";
+
+message STMotorPara
+{
+    optional uint32 uiDrvId                   = 1;   //电机ID
+    optional uint32 uiLineId                  = 2;   //曲线ID
+    optional uint32 uiStartFre                = 3;   //开始频率
+    optional uint32 uiEndFre                  = 4;   //结束频率
+    optional uint32 uiEchStep                 = 5;   //微步数
+    optional uint32 uiMaxLadder               = 6;   //最大台阶数
+    optional uint32 uiSpar                    = 7;   //S曲线因子
+};
+
+message STSubSysMotor
+{
+    optional uint32 uiSysId                   = 1;   //系统ID
+    repeated STMotorPara stPara               = 2;   //电机参数
+};
+
+message STMotorList
+{
+    repeated STSubSysMotor data               = 1;   //电机参数
+};
+
+message STReqReset
+{
+    optional bool bUpper                      = 1;   //是否为上位机   1:是 0:否
+};
+
+//MSG_STReqAddLiquid 1001
+message STReqAddLiquid                        //请求添加液体
+{
+    optional ServerPid enDevType              = 1[default = SPid_SmpNdl];   //设备类型
+    optional uint32 uiCount                   = 2;   
+    optional uint32 uiVolume                  = 3;   
+    optional uint32 uiSpace                   = 4;
+};
+
+//MSG_ResReset 1002
+message STResResult                           //响应结果
+{
+    optional uint32 uiResult                  = 1;   //任务结果   0:成功 1:失败
+};
+//MSG_STReqAddTask 1003 
+message STReqAddTask                          //请求添加任务
+{
+    optional uint32 uiTaskId                  = 1;   //任务ID
+    optional uint32 uiSmpType                 = 2;   //样本类型，全血8
+    optional uint32 uiMaintanType             = 3;   //维护类型
+    optional bytes strProjectName             = 4;   //项目名称
+    repeated STKeyValue stWaveChs             = 5;   //波长通道
+    optional STLiquidInfo stSmpInfo           = 6;   //样本信息
+    repeated STLiquidInfo stReagents          = 7;   //试剂信息
+    optional uint32 uiTestPoint               = 8;   //测光点
+    optional uint32 uiDiluentVol              = 9;   //稀释液量
+    optional uint32 uiLiquidVol               = 10;  //源液
+	optional uint32 uiSmpId                   = 11;  //样本号
+    optional uint32 uiBatchId                 = 12;  //任务批次
+	optional ReactCircle enCircle             = 13[default = Circle_All];  //圈号
+};
+
+//MSG_STResAddTask 1004
+message STResAddTask                          //响应添加任务
+{
+    optional uint32 uiTaskId                  = 1;   //任务ID
+    optional uint32 uiResult                  = 2;   //任务结果   0:成功 1:失败
+    optional uint32 uiMaintanType             = 3;   //维护类型
+	optional uint32 uiRCupno				  = 4;	 //反应盘杯位号
+    optional bytes szPrjName                  = 5;   //项目名称
+    repeated STAdPoints stAdPoints            = 6;   //AD值信息
+    optional STCupPos stSmpPos                = 7;   //样本位置
+	optional ReactCircle enCircle             = 8;   //圈号
+};
+
+//MSG_STNotifyRctCupStatus 1005
+message STNotifyRctCupStatus
+{
+    repeated STRctCupStatus stCupStatus       = 1; //反应杯状态
+	optional ReactCircle enCircle             = 2; //圈号
+};
+
+//Pid_MarginScan = 703
+//余量扫描请求 MSG_STReqMarginScan 1007
+message STReqMarginScan
+{
+    repeated STCupPos stScanCup               = 1;
+};
+
+//余量扫描响应 MSG_STResMarginScan 1008
+message STResMarginScan
+{
+    repeated STMarginScan stMarginInfo        = 1;
+    optional uint32 uiMarginscan              = 2;  //是否为余量描述（1-是，0-否）
+};
+
+//排空气 MSG_STReqAirOut 1011
+message STReqAirOut
+{
+	optional ReactCircle enCircle 			  = 1;	//圈号
+    optional uint32 uiOutTimes                = 2; 	//排空气次数
+}
+
+//三针强化清洗
+message STReqIntensifyWash
+{
+	optional ReactCircle enCircle 			  = 1;	//圈号
+	optional uint32 washType      			  = 2;  //清洗类型（对应枚举：IntensifyWashType）
+	optional uint32 washTimes				  = 3;  //次数
+}
+
+//条码扫描请求 MSG_STReqBarcodeScan 1009
+message STReqBarcodeScan
+{
+    repeated STCupPos stReagCup               = 1;  //试剂杯
+    repeated STCupPos stSmpCup                = 2;  //样本杯
+};
+
+//条码扫描响应 MSG_STResBarcodeScan 1010
+message STResBarcodeScan
+{
+    repeated STBarcodeScan stReagInfo         = 1;   //试剂杯条码信息
+    repeated STBarcodeScan stSmpInfo          = 2;   //样本杯条码信息
+};
+
+//请求试剂暂停 MSG_STReqReagentSuspend 1013
+message STReqReagentSuspend
+{
+    optional bool bSuspend                     = 1;   //是否挂起（挂起：true,取消：false）
+};
+
+//通知试剂信息
+message STNotifyReagInfo
+{
+    repeated STThreshold stThreshold             = 1; //门限值
+    repeated STReagInfo stReagInfo               = 2; //试剂信息
+	repeated STReagInfo stAutoLoadReagInfo       = 3; //自动装载试剂信息
+};
+
+//单个自动装载反应盘改变信息
+message STReagChangeInfo
+{
+	optional bool bAdd							 = 1; //改变类型，true:增加 false:删除
+	optional ReagDiskType reagDiskType			 = 2; //试剂盘类型，1:试剂盘 2:自动装载试剂盘
+	optional STReagInfo stReagInfo				 = 3; //试剂信息
+};
+
+//所有自动装载反应盘改变信息
+message STReagChangeInfoList
+{
+	repeated STReagChangeInfo listInfo			 = 1; //试剂信息列表
+};
+
+//通知中位机状态
+message STNotifyMachineStatus
+{
+    optional uint32 uiMachStatus                = 1; //中位机状态
+    optional uint32 uiLeftTime                  = 2; //剩余时间
+};
+
+//通知中位机连接成功
+message STNotifyConnect
+{
+    optional string szMachIp                    = 1; //中位机IP
+};
+
+//请求光量检测
+message STReqLightCheck
+{
+	optional ReactCircle enCircle 				= 1;   //圈号
+};
+
+//通知光量检测与杯空白AD值
+message STNotifyADValue
+{
+	optional ReactCircle enCircle 				= 1;   //圈号
+    repeated STCupADValue stCupInfo             = 2;   //杯信息
+};
+
+//通知跳过杯位
+message STReqSkipCup
+{
+	optional uint32 cupid                       = 1;   //杯位号
+}
+
+//请求动作
+message STReqActCmd
+{
+    optional uint32 uiSubsysId                  = 1; //子系统ID
+    optional uint32 uiActType                   = 2; //动作类型
+    repeated uint32 uiParams                    = 3; //参数
+};
+
+//通知补偿参数
+message STNotifyOffset
+{    
+    optional uint32 uiSubsysId              = 1; //下位机编号
+	optional uint32 type					= 2; //参数类型
+    repeated int32  para                    = 3; //补偿参数
+};
+
+//通知定时器
+message STNotifyTimer
+{
+    optional uint32 uiTimerId                   = 1; //定时器ID
+    optional string szTimerName                 = 2; //定时器名称
+};
+//设置中位机时间
+message STReqSetTime
+{
+    optional string strTime                     = 1;  //时间
+};
+
+//请求精确加量
+message STReqPreciseAdd
+{
+    optional uint32 uiSubsysId                  = 1;  //子系统ID
+    optional uint32 uiAbsorbPos                 = 2;  //吸液位
+    optional uint32 uiAbsorbAmount              = 3;  //吸液量
+    optional uint32 uiDischargePos              = 4;  //排液位   
+    optional uint32 uiDischargeAmount           = 5;  //排液量(ul)
+    optional uint32 uiLoopTimes                 = 6;  //循环次数
+   
+};
+
+//暗电流测试请求
+message STReqDarkCurrentTest
+{
+	optional ReactCircle enCircle = 1;   //圈号
+    optional uint32 testType = 2;	//测试类型
+    optional uint32 testCount = 3;//需测试次数    
+    repeated STKeyValue dpValueInfo = 4;//14路增益值
+};
+
+//暗电流测试响应
+message STResDarkCurrentTest
+{
+	optional ReactCircle enCircle = 1;   //圈号
+    optional uint32 testType = 2;	//测试类型  
+    repeated STDarkCurrentAD darkCurrentADInfo = 3;//暗电流测试AD信息
+};
+
+//通知温度
+message STNotifyTemp
+{
+    optional uint32 ulSubsysId   = 1;                    //子系统ID
+    optional int32 iTemp         = 2;                    //温度
+};
+
+//中位机日志查询
+message STGetMidLog
+{
+    optional string strIP                     = 1;  //上位机ip
+};
+
+//配置撞针处理
+message STCollideNdlConfig
+{
+    optional CollideNdl ulConfig                = 1;  //配置
+};
+
+//嵌入式版本
+message STVersions
+{
+    repeated STSubVers Vers                = 1; //版本号
+};
+
+//在机器故障时通知失败的样本任务
+message STNotifyFailedSmpTask
+{
+    repeated uint32 ulTaskId               = 1; //失败任务ID
+};
+message CCompSetRes
+{
+    optional uint32 subsysid      = 1; //子系统号
+    optional uint32 result        = 2; //执行结果
+};
+
+//通知报警信息
+message CNotifyAlarm
+{
+    optional STAlarmInfo stAlarm     = 1;  //报警信息
+    optional uint32 ulActType        = 2;  //报警动作（1代表产生,0代表恢复）
+};
+
+//同步或删除报警
+message CNotifyAlarmList
+{
+    repeated STAlarmInfo stAlarms    = 1;  //报警信息
+};
+
+//温度查询
+message CTemperatureQuery
+{
+	repeated STKeyValue temperature =1;
+};
+
+//下位机升级
+message CDwnUpdate
+{
+	repeated uint32 uiSubsysId = 1;		//下位机系统编号
+};	
+
+//下位机返回
+message CDwnUpdateRes
+{
+    optional STKeyValue UpdateRes = 1;  //升级返回结构体
+};
+
+//平坦区测试请求
+message STReqSmoothAreaTest
+{
+    optional uint32 uiCircle                 = 1;// 周期数
+};
+
+//平坦区测试响应
+message STResSmoothAreaTest
+{
+    repeated uint32 uiAdVal                  = 1;// 返回AD值
+};
+
+//虚拟示波器请求
+message STReqShowWave
+{
+    optional uint32 uiSwitch                 = 1;// 开关
+    optional uint32 uiChannel                = 2;// 通道
+    optional uint32 uiSignal                 = 3;// 信号
+};
+
+//虚拟示波器响应
+message STResShowWave
+{
+    optional uint32 uiChannel                = 1;// 通道
+    repeated bool uiSigVal                   = 2;// 返回信号值
+};
+
+//端口切换
+message STReqConnectPort
+{
+	optional uint32 uiPort        = 1;// 重新连接端口
+};
+
+
+//AD值请求
+message STReqShowAD
+{
+    optional uint32 uiSwitch                 = 1;// 开关
+};
+
+//开关
+message STSwitch
+{
+	optional bool uiSwitch					 = 1;// 开关 1开，0关
+	optional uint32 uiPara					 = 2;// 参数 0静止，1动态
+};
+
+//AD值
+message STTestAD
+{
+	repeated STTestVal stVal				= 1;//每个杯位的AD值
+};
+
+//浮子压力状态
+message STFLxState
+{
+	repeated uint32 uiVal	= 1; //值
+};
+
+message STLog
+{
+    optional string szLogInfo     = 1;  // 日志信息
+};
+
+message STSound
+{
+	optional uint32 priority	= 1;//优先级
+	optional string name 		= 2;// 音频名称
+};
+
+message RegPollution
+{
+    optional string srcprj        = 1;        //污染源
+    optional string dstprj        = 2;        //污染项目
+    optional uint32 ndltype       = 3;        //污染针类型 （1-R1,2-R2,3-R3，4-R4)
+    optional uint32 washtype      = 4;        //清洗类型  (0-普通清洗，1-强化清洗）
+    optional uint32 washcount     = 5;        //洗洗次数 （默认1次）
+}
+
+message STReqRegPollution
+{
+    repeated RegPollution regpollutionlist = 1;   //污染列表
+}
+
+message SmpPollution
+{
+    optional uint32 srctype       = 1;        //污染源样本
+    optional uint32 dsttype       = 2;        //污染样本
+    optional string dstprj        = 3;        //污染项目
+    optional uint32 washtype      = 4;        //清洗类型  (0-普通清洗，1-强化清洗）
+    optional uint32 washcount     = 5;        //洗洗次数 （默认1次）
+}
+
+message STReqSmpPollution
+{
+    repeated SmpPollution smppollutionlist = 1;   //污染列表
+}
+
+message BeepAlarm
+{
+	optional uint32 alarmLevel = 1;	//报警等级
+	optional uint32 beepCount  = 2; //鸣笛次数
+}
+
+message STReqBeepAlarm
+{
+	optional uint32 BeepEnable = 1;	//0-关闭蜂鸣器报警，1-使能蜂鸣器报警
+	repeated BeepAlarm beepCountList = 2;	//报警配置列表
+}
+
+message BloodAbsorbMode
+{
+	optional uint32 mode = 1; //全血吸样模式 0：上层血   1：下层血
+}
+
+
+//反应杯交叉污染
+message RctPollution
+{
+    optional string srcprj        = 1;        //污染源
+    optional string dstprj        = 2;        //污染项目
+    optional uint32 washtype      = 3;        //清洗类型  (0-普通清洗，1-强化清洗）
+}
+
+message STRCtRegPollution
+{
+    repeated RctPollution rctpollutionlist = 1;   //污染列表
+}
+
+message STConsum
+{
+	optional uint32 type	 	= 1;			//耗材类型
+	optional uint32 para		= 2;			//参数
+}
+
+message STTempPara
+{
+	optional uint32 tempreact	 	= 1;			//反应盘
+	optional uint32 delta			= 2;			//delta
+	optional uint32 tempwash1		= 3;			//tempwash1
+	optional uint32 tempwash2		= 4;			//tempwash2
+	optional uint32 tempwash3		= 5;			//tempwash3			
+}
+
+//条码上传
+message STShelfMng
+{
+	optional ShelfCtrlType ctrlType 	= 1;		//控制类型
+	optional uint32 shelfNum 			= 2;		//样本架号
+	repeated STSmpBacode stSmpBarcode 	= 3;		//样本条码
+}
+
+message STFreeShelf
+{
+	optional uint32 loca		= 1;
+}
+
+message STSetShelf
+{
+	optional uint32 shelfNum	= 1;
+	optional uint32 ulUnit		= 2;
+}
+
+//通知状态
+message STNotifState
+{
+	optional MachUnit enUnit	= 1;
+	optional uint32 ulLoca		= 2;
+	optional uint32 ulState		= 3;
+	optional uint32 ulShelfNum	= 4;
+}
+
+message STTempQuery
+{
+    optional uint32 ulSubsysId   = 1;           	//子系统ID
+	repeated STKeyValue temp = 2;
+}

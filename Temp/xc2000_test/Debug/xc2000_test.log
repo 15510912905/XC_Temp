@@ -1,0 +1,12 @@
+﻿  VisualGDB: D:\1azrrecourse\C_prj\xc2000_test => /home/xc/A_Project/xc2000_analyse: 1 files copied (18KB), 250 files are up-to-date.
+  VisualGDB: Run " " in directory "/home/xc/A_Project/xc2000_analyse" on xc@xc-virtual-machine (SSH)
+  bash: : 未找到命令
+  -------------------------------------------------------------
+  Command exited with code 127
+  Executable: 
+  Arguments: 
+  Directory: /home/xc/A_Project/xc2000_analyse
+VisualGDB : error : Command-line action failed
+VisualGDB : error : Build has failed. See the Output window for more details.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\VC\v160\Microsoft.MakeFile.Targets(46,5): error MSB3073: 命令“C:\Windows\System32\chcp.com 65001 >NUL 
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\VC\v160\Microsoft.MakeFile.Targets(46,5): error MSB3073:  "C:\Program Files (x86)\Sysprogs\VisualGDB\\VisualGDB.exe" /build "D:\1azrrecourse\C_prj\xc2000_test\xc2000_test.vcxproj" "/solution:D:\1azrrecourse\C_prj\xc2000_test\xc2000_test.sln"  "/config:Debug" "/platform:Win32"”已退出，代码为 1。
